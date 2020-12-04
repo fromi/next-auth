@@ -180,10 +180,26 @@ export default async (sessionToken, profile, providerAccount, options) => {
           // we do already have an account with the same email address as the one in the
           // oAuth profile the user has just tried to sign in with.
           //
-          // We don't want to have two accounts with the same email address, and we don't
-          // want to link them in case it's not safe to do so, so instead we prompt the user
-          // to sign in via email to verify their identity and then link the accounts.
-          throw new AccountNotLinkedError()
+          // Here we choose to link the provider even though it is not fully secured.
+          // For Game Park and playing board games that security risk is perfectly fine.
+          // Once next-auth offer a solution for secure providers linking, we can update the project to integrate it.
+          await linkAccount(
+            userByEmail.id,
+            providerAccount.provider,
+            providerAccount.type,
+            providerAccount.id,
+            providerAccount.refreshToken,
+            providerAccount.accessToken,
+            providerAccount.accessTokenExpires
+          )
+          await dispatchEvent(events.linkAccount, { userByEmail, providerAccount })
+
+          session = useJwtSession ? {} : await createSession(user)
+          return {
+            session,
+            userByEmail,
+            isNewUser
+          }
         } else {
           // If the current user is not logged in and the profile isn't linked to any user
           // accounts (by email or provider account id)...
