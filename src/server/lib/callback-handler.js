@@ -194,7 +194,7 @@ export default async (sessionToken, profile, providerAccount, options) => {
           )
           await dispatchEvent(events.linkAccount, { userByEmail, providerAccount })
 
-          session = useJwtSession ? {} : await createSession(user)
+          session = useJwtSession ? {} : await createSession(userByEmail)
           return {
             session,
             userByEmail,
