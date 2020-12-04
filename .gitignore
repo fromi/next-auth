@@ -23,13 +23,15 @@ node_modules
 # Generated files
 .docusaurus
 .cache-loader
-.next
 
 # VS
 /.vs/slnx.sqlite-journal
 /.vs/slnx.sqlite
 /.vs
 .vscode
+
+# IntelliJ
+.idea
 
 # GitHub Actions runner
 /actions-runner
