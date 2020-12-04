@@ -94,11 +94,8 @@ const Adapter = (typeOrmConfig, options = {}) => {
     let ObjectId
     if (config.type === 'mongodb') {
       idKey = '_id'
-      // Using a dynamic import causes problems for some compilers/bundlers
-      // that don't handle dynamic imports. To try and work around this we are
-      // using the same method mongodb uses to load Object ID type, which is to
-      // use the require_optional loader.
-      const mongodb = require_optional('mongodb')
+      // We replaced require_optional here by a simple require to fix runtime bug on Clever Cloud. See https://github.com/nextauthjs/next-auth/issues/887
+      const mongodb = require('mongodb')
       ObjectId = mongodb.ObjectId
     }
 
