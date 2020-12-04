@@ -183,8 +183,10 @@ export default async (sessionToken, profile, providerAccount, options) => {
           // Here we choose to link the provider even though it is not fully secured.
           // For Game Park and playing board games that security risk is perfectly fine.
           // Once next-auth offer a solution for secure providers linking, we can update the project to integrate it.
+          user = userByEmail
+
           await linkAccount(
-            userByEmail.id,
+            user.id,
             providerAccount.provider,
             providerAccount.type,
             providerAccount.id,
@@ -192,12 +194,12 @@ export default async (sessionToken, profile, providerAccount, options) => {
             providerAccount.accessToken,
             providerAccount.accessTokenExpires
           )
-          await dispatchEvent(events.linkAccount, { userByEmail, providerAccount })
+          await dispatchEvent(events.linkAccount, { user, providerAccount })
 
-          session = useJwtSession ? {} : await createSession(userByEmail)
+          session = useJwtSession ? {} : await createSession(user)
           return {
             session,
-            userByEmail,
+            user,
             isNewUser
           }
         } else {
